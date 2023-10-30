@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Ispit.Todo.Models.AspNetUser>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+               
+                TodoTitle
+            <th>
+                Tasks
+            </th>
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+                <td>
+                    @foreach (var todolist in item.Todolists)
+                    {
+                        var cat = (ViewBag.Todolists as List<Todolist>).FirstOrDefault(x => x.Id == todolist.Id);
+                        <span>@cat.TodoTitle</span>
+
+                        <br />
+                    <td>
+
+                            @foreach (var task1 in todolist.Tasks1)
+                            {
+                                var tsk = (ViewBag.Tasks1 as List<Task1>).FirstOrDefault(x => x.Id == task1.Id);
+                            <span>@tsk.TaskTitle</span>
+
+                            <br />
+                            }
+                    </td>
+                    }
+                </td>
+                <div class="col-md-4">
+                    <form asp-action="EditTodo">
+                        <input type="hidden" asp-for="Id" />
+                        <label>Todos</label>
+                        @foreach (Todolist cat in ViewBag.Todos)
+                        {
+                            <div class="form-group">
+                                @Html.CheckBox(cat.TodoTitle,Model.Todolists.Count(x=>x.CategoryId==cat.Id)>0)
+                                @Html.Label(cat.TodoTitle)
+                            </div>
+                        }
+                        <div class="form-group">
+                            <input type="submit" value="Save categories" class="btn btn-primary" />
+                        </div>
+                    </form>
+
+                </div>
+                ,
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+                    </label>
+            <td>
+                   
+
+                <a asp-action="Edit" asp-route-id="@item.AspNetUserId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AspNetUserId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AspNetUserId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
